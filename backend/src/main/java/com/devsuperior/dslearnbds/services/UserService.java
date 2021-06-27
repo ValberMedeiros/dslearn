@@ -1,0 +1,34 @@
+package com.devsuperior.dslearnbds.services;
+
+import com.devsuperior.dslearnbds.repositories.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+@Service
+public class UserService implements UserDetailsService {
+
+    private static Logger logger = LoggerFactory.getLogger(UserService.class);
+
+    private UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+
+        var user = userRepository.findByEmail(username);
+        if (user == null) {
+            logger.error("User not found: {}", username);
+            throw new UsernameNotFoundException("Email not found");
+        }
+        logger.info("User found: {}", username);
+        return user;
+    }
+
+}
