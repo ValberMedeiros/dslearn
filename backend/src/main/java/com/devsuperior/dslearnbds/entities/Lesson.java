@@ -10,9 +10,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -41,6 +44,9 @@ public abstract class Lesson implements Serializable {
             }
     )
     private Set<Enrollment> enrollmentsDone = new HashSet<>();
+
+    @OneToMany(mappedBy = "lesson")
+    private List<Deliver> deliveries = new ArrayList<>();
 
     protected Lesson() {
     }
@@ -82,6 +88,10 @@ public abstract class Lesson implements Serializable {
 
     public void setSection(Section section) {
         this.section = section;
+    }
+
+    public List<Deliver> getDeliveries() {
+        return deliveries;
     }
 
     @Override
